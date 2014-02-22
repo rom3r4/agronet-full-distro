@@ -3,7 +3,7 @@
 # must start with '/'
 DESTINATION_DIR="/www/agronet_test1"
 DATABASE_NAME="agronet_test1"
-DATABASE_USER="root"
+DATABASE_ADMIN="root"
 
 DRUSH=`which drush`
 GIT=`which git` 
@@ -94,23 +94,45 @@ install() {
     curl -O  https://github.com/julianromera/agronet-database/raw/master/agronet-db.sql.tar
     res=$?    
     checkok $res
-        
+
+    echo "Uncompressing database...
+    
+    if [ ! -f agronet-db.sql.tar ];then
+       echo "there was an error downloading database. aborting.."
+       exit 1
+    fi
+    
+    "        
     tar -xzvf agronet-db.sql.tar
     res=$?
     checkok $res
 
     echo "Doing modifications to Drupal Commons..."
+
     cd $DESTINATION_DIR
     ./conf-agronet.sh $DESTINATION_DIR ./agronet-db.sql 
     res=$?
     checkok $res
     
     echo "postinstalling..."
+
     cd $DESTINATION_DIR_
     ./postinstall $DESTINATION_DIR
     res=$?
-    
     checkok $res
+    
+    drush --root=$DESTINATION_DIR cc all
+    res=$?
+    checkok $res
+
+    drush --root=$DESTINATION_DIR updb
+    res=$?
+    checkok $res
+
+    echo "Check that $DESTINATION_DIR/sites/default/settings.php contains the same database" 
+    echo "credentials than you just created"
+
+    
     
 }
 
@@ -122,18 +144,12 @@ checkok() {
 }
 
 
-echo "creating database $DATABASE_NAME... enter mysql admin password when requested."
-sudo mysqladmin -uroot -p create $DATABASE_NAME
-res=$?
+echo "creating database $DATABASE_NAME... enter mysql ADMIN password when requested."
 
+sudo mysqladmin -uSDATABASE_ADMIN -p create $DATABASE_NAME
+res=$?
 checkok $res
 
 install
- 
-drush --root=$DESTINATION_DIR cc all
-drush --root=$DESTINATION_DIR updb
-
-echo "Check that $DESTINATION_DIR/sites/default/settings.php contains the same database" 
-echo "credentials than you just created"
 
 
