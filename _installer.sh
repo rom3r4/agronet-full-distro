@@ -34,13 +34,13 @@ if [ "x$DESTINATION_DIR" = "x" ];then
     echo "DESTINATION_DIR can not be empty."
 fi
 
-if [ -d $DESTINATION_DIR ];then
-    echo "Destination directory ($DESTINATION_DIR) should not exist. edit this file to change it."
-    exit 1
-fi
+#if [ -d $DESTINATION_DIR ];then
+#    echo "Destination directory ($DESTINATION_DIR) should not exist. edit this file to change it."
+#    exit 1
+#fi
 
 
-install() {
+install1() {
 
     cd /tmp
 
@@ -77,33 +77,37 @@ install() {
     res=$?
     checkok $res
 
+}
+install(){
     echo -n 'enter your Drupal MySql user: '
     read my_user < /dev/tty
 
     echo -n 'enter your Drupal MySql password: '
     read my_passwd < /dev/tty
     
+
     echo "Installing full site.. please be patient"
     cd $DESTINATION_DIR
     
+    echo "`pwd`"
     echo "drush site-install commons --account-name=admin --account-pass=admin --db-url=mysql://$my_user:$my_passwd@localhost/$DATABASE_NAME"
-    drush site-install commons --account-name=admin --account-pass=admin --db-url=mysql://$my_user:$my_passwd@localhost/$DATABASE_NAME
+    sudo drush --root=$DESTINATION_DIR site-install commons --account-name=admin --account-pass=admin --db-url=mysql://$my_user:$my_passwd@localhost/$DATABASE_NAME
     res=$?
     checkok $res
 
     echo "downloading latest database-dump"
-    curl -O  https://github.com/julianromera/agronet-database/raw/master/agronet-db.sql.tar
+    sudo curl -O  https://github.com/julianromera/agronet-database/raw/master/agronet-db.sql.tar
     res=$?    
     checkok $res
 
-    echo "Uncompressing database...
+    echo "Uncompressing database..."
     
     if [ ! -f agronet-db.sql.tar ];then
        echo "there was an error downloading database. aborting.."
        exit 1
     fi
     
-    "        
+            
     tar -xzvf agronet-db.sql.tar
     res=$?
     checkok $res
@@ -147,7 +151,7 @@ checkok() {
 
 echo "creating database $DATABASE_NAME... enter mysql ADMIN password"
 
-sudo mysqladmin -u$DATABASE_ADMIN -p create $DATABASE_NAME
+#sudo mysqladmin -u$DATABASE_ADMIN -p create $DATABASE_NAME
 res=$?
 
 if [ $res -ne 0 ];then
