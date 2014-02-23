@@ -25,7 +25,7 @@ A current live snapshot can be seen on [on this link](http://agronet.appgee.net)
 *Tested on Debian 7 wheezy*
 
 ```
-Untested. Run at your own risk.  
+Not fully tested. Run at your own risk.  
 curl -Ss https://raw.github.com/julianromera/agronet-full-distro/master/_installer.sh | bash
 ```
      
