@@ -160,7 +160,7 @@ checkok() {
 
 echo "creating database $DATABASE_NAME... enter mysql ADMIN password"
 
-#sudo mysqladmin -u$DATABASE_ADMIN -p create $DATABASE_NAME
+sudo mysqladmin -u$DATABASE_ADMIN -p create $DATABASE_NAME
 res=$?
 
 if [ $res -ne 0 ];then
