@@ -45,8 +45,8 @@ install() {
     cd /tmp
 
     if [ -d /tmp$DESTINATION_DIR ];then
-      echo '/tmp$DESTINATION_DIR exists. Overwrite it? (y/n)'
-      read yesno
+      echo -n '/tmp$DESTINATION_DIR exists. Overwrite it? (y/n)'
+      read yesno < /dev/tty
       
       if [ "x$yesno" = "y" ];then
           rm -rf /tmp$DESTINATION_DIR
@@ -78,10 +78,10 @@ install() {
     checkok $res
 
     echo -n 'enter your Drupal MySql user: '
-    read my_user
+    read my_user < /dev/tty
 
     echo -n 'enter your Drupal MySql password: '
-    read my_passwd
+    read -i my_passwd < /dev/tty
     
     echo "Installing full site.. please be patient"
     cd $DESTINATION_DIR
@@ -151,7 +151,7 @@ res=$?
 
 if [ $res -ne 0 ];then
     echo 'Something went wrong. continue? (y/n)' 
-    read yesno < /dev/tty
+    read -p yesno < /dev/tty
     
     if [ "x$yesno" = "x" ] || [ "x$yesno" != "xy" ];then
       exit 1
