@@ -40,7 +40,7 @@ if [ -d $DESTINATION_DIR ];then
 fi
 
 
-install() {
+install1() {
 
     cd /tmp
 
@@ -76,8 +76,8 @@ install() {
     cp /tmp$DESTINATION_DIR/*.inc $DESTINATION_DIR
     res=$?
     checkok $res
-
-
+}
+install() {
     echo -n 'enter your Drupal MySql user: '
     read my_user < /dev/tty
 
@@ -88,12 +88,12 @@ install() {
     echo "Installing full site.. please be patient"
     cd $DESTINATION_DIR
     
-    drush -y --root=$DESTINATION_DIR site-install commons --account-name=admin --account-pass=admin --db-url=mysql://$my_user:$my_passwd@localhost/$DATABASE_NAME
+    drush -y --root=$DESTINATION_DIR site-install commons --account-name=admin --account-pass=admin --db-url=mysql://`echo $my_user`:`echo $my_passwd`@localhost/$DATABASE_NAME
     res=$?
     checkok $res
 
     echo "downloading latest database-dump"
-    curl -O https://github.com/julianromera/agronet-database/raw/master/agronet-db.sql.tar
+    curl --progress-bar -O  https://raw.github.com/julianromera/agronet-database/master/agronet-db.sql.tar
     res=$?    
     checkok $res
 
@@ -103,16 +103,24 @@ install() {
        exit 1
     fi
 
+    cd $DESTINATION_DIR
+
     echo "Uncompressing database..."
-            
-    tar -xvf agronet-db.sql.tar
+    
+    sqlfile=`tar -xvf agronet-db.sql.tar`
     res=$?
     checkok $res
+
+    if [ ! -f $sqlfile ] || [ ! -s $sqlfile ];then
+       echo "there was an error downloading database. aborting.."
+       exit 1
+    fi
+    
 
     echo "Doing modifications to Drupal Commons..."
 
     cd $DESTINATION_DIR
-    ./conf-agronet.sh $DESTINATION_DIR ./agronet-db.sql 
+    ./conf-agronet.sh $DESTINATION_DIR $sqlfile 
     res=$?
     checkok $res
     
@@ -127,9 +135,9 @@ install() {
     res=$?
     checkok $res
 
-    drush --root=$DESTINATION_DIR updb
-    res=$?
-    checkok $res
+    #drush --root=$DESTINATION_DIR updb
+    #res=$?
+    #checkok $res
 
     echo "Check that $DESTINATION_DIR/sites/default/settings.php contains the same database" 
     echo "credentials than you just created"
