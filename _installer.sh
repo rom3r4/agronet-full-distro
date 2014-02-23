@@ -40,7 +40,7 @@ if [ -d $DESTINATION_DIR ];then
 fi
 
 
-install1() {
+install() {
 
     cd /tmp
 
@@ -76,8 +76,7 @@ install1() {
     cp /tmp$DESTINATION_DIR/*.inc $DESTINATION_DIR
     res=$?
     checkok $res
-}
-install() {
+
     echo -n 'enter your Drupal MySql user: '
     read my_user < /dev/tty
 
@@ -87,6 +86,11 @@ install() {
 
     echo "Installing full site.. please be patient"
     cd $DESTINATION_DIR
+    
+    if [ ! -d $DESTINATION_DIR ];then
+      echo "destination directory ($DESTINATION_DIR) doesn't exist (?). aborting.."
+      exit 1
+    fi
     
     drush -y --root=$DESTINATION_DIR site-install commons --account-name=admin --account-pass=admin --db-url=mysql://`echo $my_user`:`echo $my_passwd`@localhost/$DATABASE_NAME
     res=$?
