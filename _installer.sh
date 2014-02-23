@@ -45,7 +45,7 @@ install() {
     cd /tmp
 
     if [ -d /tmp$DESTINATION_DIR ];then
-      echo '/tmp$DESTINATION_DIR exists. Override it? (y/n)'
+      echo '/tmp$DESTINATION_DIR exists. Overwrite it? (y/n)'
       read yesno
       
       if [ "x$yesno" = "y" ];then

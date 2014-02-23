@@ -1,6 +1,5 @@
 ###[agronet](#)
 
-(not working yet)
 Agronet's Drupal Installation Profile
 
 ###Demo Prototype
@@ -13,19 +12,21 @@ A current live snapshot can be seen on [on this link](http://agronet.appgee.net)
 - Git
 - Tar
 - Curl
-- [Drush](//github.com/drush-ops/drush) `>= version 6.x``
+- Mysqladmin (Bundled with MySql)
+- [Drush](//github.com/drush-ops/drush) ``>= version 6.x``
 
 
-(*) x=(Windows/Linux/Mac OS)-(Apache/Nginx)-MySQL-PHP
+(*) x=(Windows/Linux/Mac OS) + (Apache/Nginx) + MySQL + PHP
 
     
 ###Installation  
 
 
-(Tested to work on Debian 7 wheezy)
+(Tested on Debian 7 wheezy)
 
 ```
-
+(Untested. Run by your own responsibility)  
+curl -Ss https://raw.github.com/julianromera/agronet-full-distro/master/_installer.sh | bash
 ```
      
 
