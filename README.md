@@ -22,10 +22,10 @@ A current live snapshot can be seen on [on this link](http://agronet.appgee.net)
 ###Installation  
 
 
-(Tested on Debian 7 wheezy)
+*Tested on Debian 7 wheezy*
 
 ```
-(Untested. Run on your own responsibility)  
+Untested. Run at your own risk.  
 curl -Ss https://raw.github.com/julianromera/agronet-full-distro/master/_installer.sh | bash
 ```
      
