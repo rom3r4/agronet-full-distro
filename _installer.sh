@@ -149,7 +149,7 @@ echo "creating database $DATABASE_NAME... enter mysql ADMIN password when reques
 sudo mysqladmin -u$DATABASE_ADMIN -p create $DATABASE_NAME
 res=$?
 
-if [ $1 -ne 0 ];then
+if [ $res -ne 0 ];then
     echo "Something went wrong. continue? (y/n)"
     read yesno
     
