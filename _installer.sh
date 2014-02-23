@@ -146,9 +146,19 @@ checkok() {
 
 echo "creating database $DATABASE_NAME... enter mysql ADMIN password when requested."
 
-sudo mysqladmin -uSDATABASE_ADMIN -p create $DATABASE_NAME
+sudo mysqladmin -u$DATABASE_ADMIN -p create $DATABASE_NAME
 res=$?
-checkok $res
+
+if [ $1 -ne 0 ];then
+    echo "Something went wrong. continue? (y/n)"
+    read yesno
+    
+    if [ "x$yesno" = "x"] || [ "x$yesno" != "xy"];then
+      exit 1
+    fi
+fi
+
+
 
 install
 
