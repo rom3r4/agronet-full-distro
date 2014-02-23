@@ -34,13 +34,13 @@ if [ "x$DESTINATION_DIR" = "x" ];then
     echo "DESTINATION_DIR can not be empty."
 fi
 
-#if [ -d $DESTINATION_DIR ];then
-#    echo "Destination directory ($DESTINATION_DIR) should not exist. edit this file to change it."
-#    exit 1
-#fi
+if [ -d $DESTINATION_DIR ];then
+    echo "Destination directory ($DESTINATION_DIR) should not exist. edit this file to change it."
+    exit 1
+fi
 
 
-install1() {
+install() {
 
     cd /tmp
 
@@ -65,7 +65,7 @@ install1() {
 
     echo "copying recently created dir to destination.."
     mkdir -p $DESTINATION_DIR 
-    cp -R /tmp$DESTINATION_DIR/* $DESTINATION_DIR 
+    cp -R /tmp$DESTINATION_DIR/tmp/agronet/* $DESTINATION_DIR 
 
 
     echo "copying scripts to $DESTINATION_DIR.."
@@ -77,8 +77,7 @@ install1() {
     res=$?
     checkok $res
 
-}
-install(){
+
     echo -n 'enter your Drupal MySql user: '
     read my_user < /dev/tty
 
@@ -91,7 +90,7 @@ install(){
     
     echo "`pwd`"
     echo "drush site-install commons --account-name=admin --account-pass=admin --db-url=mysql://$my_user:$my_passwd@localhost/$DATABASE_NAME"
-    sudo drush --root=$DESTINATION_DIR site-install commons --account-name=admin --account-pass=admin --db-url=mysql://$my_user:$my_passwd@localhost/$DATABASE_NAME
+    drush --root=$DESTINATION_DIR site-install commons --account-name=admin --account-pass=admin --db-url=mysql://$my_user:$my_passwd@localhost/$DATABASE_NAME
     res=$?
     checkok $res
 
@@ -100,13 +99,13 @@ install(){
     res=$?    
     checkok $res
 
-    echo "Uncompressing database..."
     
-    if [ ! -f agronet-db.sql.tar ];then
+    if [ ! -f agronet-db.sql.tar ] || [ ! -s agronet-db.sql.tar ];then
        echo "there was an error downloading database. aborting.."
        exit 1
     fi
-    
+
+    echo "Uncompressing database..."
             
     tar -xzvf agronet-db.sql.tar
     res=$?
