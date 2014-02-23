@@ -124,14 +124,14 @@ install() {
     echo "Doing modifications to Drupal Commons..."
 
     cd $DESTINATION_DIR
-    ./conf-agronet.sh $DESTINATION_DIR $sqlfile 
+    ./conf-agronet.sh -x $DESTINATION_DIR $sqlfile 
     res=$?
     checkok $res
     
     echo "postinstalling..."
 
     cd $DESTINATION_DIR_
-    ./postinstall $DESTINATION_DIR
+    ./postinstall.sh $DESTINATION_DIR
     res=$?
     checkok $res
     
