@@ -150,7 +150,7 @@ sudo mysqladmin -u$DATABASE_ADMIN -p create $DATABASE_NAME
 res=$?
 
 if [ $res -ne 0 ];then
-    echo "Something went wrong. continue? (y/n)" 
+    echo 'Something went wrong. continue? (y/n)' 
     read yesno < /dev/tty
     
     if [ "x$yesno" = "x" ] || [ "x$yesno" != "xy" ];then
