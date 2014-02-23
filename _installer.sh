@@ -82,20 +82,18 @@ install() {
     read my_user < /dev/tty
 
     echo -n 'enter your Drupal MySql password: '
-    read my_passwd < /dev/tty
+    read -s my_passwd < /dev/tty
     
 
     echo "Installing full site.. please be patient"
     cd $DESTINATION_DIR
     
-    echo "`pwd`"
-    echo "drush site-install commons --account-name=admin --account-pass=admin --db-url=mysql://$my_user:$my_passwd@localhost/$DATABASE_NAME"
-    drush --root=$DESTINATION_DIR site-install commons --account-name=admin --account-pass=admin --db-url=mysql://$my_user:$my_passwd@localhost/$DATABASE_NAME
+    drush -y --root=$DESTINATION_DIR site-install commons --account-name=admin --account-pass=admin --db-url=mysql://$my_user:$my_passwd@localhost/$DATABASE_NAME
     res=$?
     checkok $res
 
     echo "downloading latest database-dump"
-    sudo curl -O  https://github.com/julianromera/agronet-database/raw/master/agronet-db.sql.tar
+    curl -O https://github.com/julianromera/agronet-database/raw/master/agronet-db.sql.tar
     res=$?    
     checkok $res
 
@@ -107,7 +105,7 @@ install() {
 
     echo "Uncompressing database..."
             
-    tar -xzvf agronet-db.sql.tar
+    tar -xvf agronet-db.sql.tar
     res=$?
     checkok $res
 
