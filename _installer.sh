@@ -81,12 +81,13 @@ install() {
     read my_user < /dev/tty
 
     echo -n 'enter your Drupal MySql password: '
-    read -i my_passwd < /dev/tty
+    read my_passwd < /dev/tty
     
     echo "Installing full site.. please be patient"
     cd $DESTINATION_DIR
     
-    drush site-install commons --account-name=admin --account-pass=admin --db-url=mysql:/$my_user:$my_passwd@localhost/$DATABASE_NAME
+    echo "drush site-install commons --account-name=admin --account-pass=admin --db-url=mysql://$my_user:$my_passwd@localhost/$DATABASE_NAME"
+    drush site-install commons --account-name=admin --account-pass=admin --db-url=mysql://$my_user:$my_passwd@localhost/$DATABASE_NAME
     res=$?
     checkok $res
 
@@ -150,7 +151,7 @@ sudo mysqladmin -u$DATABASE_ADMIN -p create $DATABASE_NAME
 res=$?
 
 if [ $res -ne 0 ];then
-    echo -n 'Something went wrong. continue? (y/n)' 
+    echo -n 'Something went wrong. continue? (y/n) ' 
     read yesno < /dev/tty
     
     if [ "x$yesno" = "x" ] || [ "x$yesno" != "xy" ];then
