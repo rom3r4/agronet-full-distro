@@ -45,10 +45,10 @@ install() {
     cd /tmp
 
     if [ -d /tmp$DESTINATION_DIR ];then
-      echo -n '/tmp$DESTINATION_DIR exists. Overwrite it? (y/n)'
+      echo -n "/tmp$DESTINATION_DIR exists. Overwrite it? (y/n) "
       read yesno < /dev/tty
       
-      if [ "x$yesno" = "y" ];then
+      if [ "x$yesno" != "x" ] && [ "x$yesno" = "xy" ];then
           rm -rf /tmp$DESTINATION_DIR
       else
           echo "quiting.."
